@@ -33,3 +33,7 @@ Route::middleware([
         return Inertia::render('Dashboard');
     })->name('dashboard');
 });
+
+Route::get('/products', [ProductController::class, 'index'])->name('products.index');
+
+Route::get('/articles', [ArticleController::class, 'index'])->name('articles.index');
