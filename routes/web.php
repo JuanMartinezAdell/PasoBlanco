@@ -1,8 +1,10 @@
 <?php
 
-use Illuminate\Foundation\Application;
-use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use App\Models\Product;
+use App\Models\Headline;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Foundation\Application;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,8 +21,8 @@ Route::get('/', function () {
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
+        'products' => Product::all(),
+        'headlines' => Headline::all(),
     ]);
 });
 
@@ -34,6 +36,16 @@ Route::middleware([
     })->name('dashboard');
 });
 
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+])->group(function () {
+    Route::resource('user', UserController::class);
+});
+
 Route::get('/products', [ProductController::class, 'index'])->name('products.index');
 
-Route::get('/articles', [ArticleController::class, 'index'])->name('articles.index');
+Route::get('/headlines', [ArticleController::class, 'index'])->name('headlines.index');
+
+Route::get('/headlines', [ArticleController::class, 'index'])->name('headlines.index');
